@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-    <html>
+    <html lang="ja">
     <head>
         <title>Simple Map</title>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
         <style>
             #map { height: 100vh; }
-            .leaflet-container { font: 24px/1.5 "Helvatica Neue", Arial, Helvetica, sans-serif !important; }
+            .leaflet-popup-content {
+                font-size: 32px;
+            }
+
         </style>
     </head>
     <body>
@@ -23,7 +26,7 @@
 
             data.forEach(function(item) {
                 var marker = L.marker([item.緯度, item.経度]).addTo(map);
-                marker.bindPopup('<b>' + item.案件名称 + '</b><br><a href="' + item.案件報告用URL + '" target="_blank">報告フォーム</a><br><a href="' + item.画像1 + '" target="_blank">画像1</a><br><a href="' + item.画像2 + '" target="_blank">画像2</a>');
+                marker.bindPopup('<b style="font-size: 32px;">' + item.案件名称 + '</b><br><a href="' + item.案件報告用URL + '" target="_blank">報告フォーム</a><br><a href="' + item.画像1 + '" target="_blank">画像1</a><br><a href="' + item.画像2 + '" target="_blank">画像2</a>');
             });
 
             map.locate({setView: true, maxZoom: 16});
