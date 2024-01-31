@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
         <style>
-            #map { height: 70vh; }
+            #map { height: 80vh; }
             .leaflet-popup-content {
-                font-size: 25px; /* スマートフォンに適した文字サイズ */
+                font-size: 20px; /* スマートフォンに適した文字サイズ */
             }
         </style>
     </head>
@@ -50,7 +50,7 @@
                         var radius = e.accuracy / 2;
                         var locationMarker = L.circleMarker(e.latlng, {
                             radius: 8,
-                            fillColor: "#ffff00",
+                            fillColor: "#aaaaaa",
                             color: "#000",
                             weight: 1,
                             opacity: 1,
@@ -69,4 +69,4 @@
         </script>
     </body>
     </html>
-    
+
