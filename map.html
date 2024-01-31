@@ -24,6 +24,8 @@
                 .then(text => {
                     const completedProjects = text.split('\n').map(line => line.trim()).filter(line => line);
 
+                    console.log('完了した案件名:', completedProjects); // 完了した案件名をコンソールに出力
+
                     var map = L.map('map').setView([35.6895, 139.6917], 13); // 東京の座標をデフォルトに設定
 
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -32,9 +34,12 @@
                     }).addTo(map);
 
                     data.forEach(function(item) {
+                        console.log('処理中の案件名:', item.案件名称); // 処理中の案件名をコンソールに出力
                         if (!completedProjects.includes(item.案件名称)) {
                             var marker = L.marker([item.緯度, item.経度]).addTo(map);
                             marker.bindPopup('<b>' + item.案件名称 + '</b><br><a href="' + item.案件報告用URL + '" target="_blank">報告フォーム</a><br><a href="' + item.画像1 + '" target="_blank">画像1</a><br><a href="' + item.画像2 + '" target="_blank">画像2</a>');
+                        } else {
+                            console.log('非表示の案件:', item.案件名称); // 非表示にする案件名をコンソールに出力
                         }
                     });
 
