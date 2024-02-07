@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>物件マップ</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map { height: 100vh; }
+        body { font-size: 16px; } /* スマホ向けフォントサイズ調整 */
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([35.6895, 139.6917], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var properties = [
+            {
+                name: "１００円パーク歌舞伎町",
+                lat: 35.69677,
+                lon: 139.700516,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%EF%BC%91%EF%BC%90%EF%BC%90%E5%86%86%E3%83%91%E3%83%BC%E3%82%AF%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA"
+            },
+            {
+                name: "ＭＡＸ ＰＡＲＫＩＮＧ歌舞伎町２丁目",
+                lat: 35.697308,
+                lon: 139.70282,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%EF%BC%AD%EF%BC%A1%EF%BC%B8%20%EF%BC%B0%EF%BC%A1%EF%BC%B2%EF%BC%AB%EF%BC%A9%EF%BC%AE%EF%BC%A7%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA%EF%BC%92%E4%B8%81%E7%9B%AE"
+            },
+            {
+                name: "アットパークセブンイレブン歌舞伎町２丁目店",
+                lat: 35.698051,
+                lon: 139.704514,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%E3%82%A2%E3%83%83%E3%83%88%E3%83%91%E3%83%BC%E3%82%AF%E3%82%BB%E3%83%96%E3%83%B3%E3%82%A4%E3%83%AC%E3%83%96%E3%83%B3%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA%EF%BC%92%E4%B8%81%E7%9B%AE%E5%BA%97"
+            },
+            {
+                name: "新宿５丁目第２駐車場",
+                lat: 35.692623,
+                lon: 139.708298,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%E6%96%B0%E5%AE%BF%EF%BC%95%E4%B8%81%E7%9B%AE%E7%AC%AC%EF%BC%92%E9%A7%90%E8%BB%8A%E5%A0%B4"
+            },
+            {
+                name: "Ｄパーキング神田鍛冶町３丁目第１",
+                lat: 35.693295,
+                lon: 139.770309,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%EF%BC%A4%E3%83%91%E3%83%BC%E3%82%AD%E3%83%B3%E3%82%B0%E7%A5%9E%E7%94%B0%E9%8D%9B%E5%86%B6%E7%94%BA%EF%BC%93%E4%B8%81%E7%9B%AE%E7%AC%AC%EF%BC%91"
+            },
+            {
+                name: "ブレイク歌舞伎町",
+                lat: 35.697857,
+                lon: 139.705231,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%E3%83%96%E3%83%AC%E3%82%A4%E3%82%AF%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA"
+            },
+            {
+                name: "鍛冶町パーキング",
+                lat: 35.692062,
+                lon: 139.772461,
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeyiy7f7NSg1LhBGs5wYAqoMOwmT_csxeHp7qGDZZrTbMWMAA/viewform?usp=pp_url&entry.1526762504=%E9%8D%9B%E5%86%B6%E7%94%BA%E3%83%91%E3%83%BC%E3%82%AD%E3%83%B3%E3%82%B0"
+            },
+        ];
+
+        properties.forEach(function(property) {
+            L.marker([property.lat, property.lon])
+                .addTo(map)
+                .bindPopup('<strong>' + property.name + '</strong><br><a href="' + property.url + '" target="_blank">報告用URL</a>');
+        });
+
+        // 現在地を表示
+        // 現在地を表示
+map.locate({setView: true, maxZoom: 16});
+function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+    L.circle(e.latlng, radius, {
+        color: 'orange',      // オレンジ色の線で円を描きます
+        fillColor: '#f03',    // 内部の塗りつぶし色もオレンジにします
+        fillOpacity: 0.5      // 塗りつぶしの透明度を設定します
+    }).addTo(map);
+}
+map.on('locationfound', onLocationFound);
+
+function onLocationError(e) {
+    alert("Error finding location: " + e.message);
+}
+map.on('locationerror', onLocationError);
+
+    </script>
+</body>
+</html>
