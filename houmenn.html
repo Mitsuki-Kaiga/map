@@ -21,8 +21,47 @@
         <button onclick="updatePins()">Load Data</button>
     </div>
     <div id="map"></div>
-    <table id="types">
-        <!-- Table content -->
+     <table id="types">
+        <tr>
+            <th></th> <!-- この空セルは行チェックボックスの列 -->
+            <th><input type="checkbox" class="select-column" data-column="0"></th>
+            <th><input type="checkbox" class="select-column" data-column="1"></th>
+            <th><input type="checkbox" class="select-column" data-column="2"></th>
+        </tr>
+        <script>
+            const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+            const tableBody = document.getElementById('types');
+
+            for (let row = 0; row < 4; row++) {
+                const tr = document.createElement('tr');
+                const rowCheckbox = document.createElement('input');
+                rowCheckbox.type = 'checkbox';
+                rowCheckbox.className = 'select-row';
+                rowCheckbox.setAttribute('data-row', row);
+                const tdRowSelect = document.createElement('td');
+                tdRowSelect.appendChild(rowCheckbox);
+                tr.appendChild(tdRowSelect);
+
+                for (let col = 0; col < 3; col++) {
+                    const td = document.createElement('td');
+                    const index = row * 3 + col;
+                    if (index < labels.length) {
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'type';
+                        checkbox.value = index + 1;
+                        checkbox.checked = true;
+                        checkbox.setAttribute('data-row', row);
+                        checkbox.setAttribute('data-column', col);
+                        td.appendChild(checkbox);
+                        td.appendChild(document.createTextNode(' Type ' + labels[index]));
+                    }
+                    tr.appendChild(td);
+                }
+                tr.className = (row < 2) ? 'blue-bg' : 'red-bg';
+                tableBody.appendChild(tr);
+            }
+        </script>
     </table>
 
     <!-- Scripts moved to the end of the body -->
