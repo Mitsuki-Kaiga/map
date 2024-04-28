@@ -17,64 +17,25 @@
 <body>
     <div id="keyInputContainer">
         <label for="apiKey">Enter API Key:</label>
-        <input type="text" id="Key" placeholder="Enter key">
+        <input type="text" id="apiKey" placeholder="Enter key (e.g., 9999)">
         <button onclick="updatePins()">Load Data</button>
     </div>
     <div id="map"></div>
     <table id="types">
-        <tr>
-            <th></th> <!-- この空セルは行チェックボックスの列 -->
-            <th><input type="checkbox" class="select-column" data-column="0"></th>
-            <th><input type="checkbox" class="select-column" data-column="1"></th>
-            <th><input type="checkbox" class="select-column" data-column="2"></th>
-        </tr>
-        <script>
-            const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
-            const tableBody = document.getElementById('types');
-
-            for (let row = 0; row < 4; row++) {
-                const tr = document.createElement('tr');
-                const rowCheckbox = document.createElement('input');
-                rowCheckbox.type = 'checkbox';
-                rowCheckbox.className = 'select-row';
-                rowCheckbox.setAttribute('data-row', row);
-                const tdRowSelect = document.createElement('td');
-                tdRowSelect.appendChild(rowCheckbox);
-                tr.appendChild(tdRowSelect);
-
-                for (let col = 0; col < 3; col++) {
-                    const td = document.createElement('td');
-                    const index = row * 3 + col;
-                    if (index < labels.length) {
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.className = 'type';
-                        checkbox.value = index + 1;
-                        checkbox.checked = true;
-                        checkbox.setAttribute('data-row', row);
-                        checkbox.setAttribute('data-column', col);
-                        td.appendChild(checkbox);
-                        td.appendChild(document.createTextNode(' Type ' + labels[index]));
-                    }
-                    tr.appendChild(td);
-                }
-                tr.className = (row < 2) ? 'blue-bg' : 'red-bg';
-                tableBody.appendChild(tr);
-            }
-        </script>
+        <!-- Table content -->
     </table>
 
+    <!-- Scripts moved to the end of the body -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         var map = L.map('map').setView([34.6866, 135.5200], 13);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         var markers = [];
-
+        // Event handlers and function definitions
         document.querySelectorAll('.select-column').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 var column = this.getAttribute('data-column');
@@ -109,16 +70,12 @@
             var key = document.getElementById('apiKey').value;
             var url = `https://1x9guheg37.execute-api.ap-northeast-1.amazonaws.com/default/houmennmap?lat=${center.lat}&lon=${center.lng}&type=${types}&key=${key}`;
 
-            // 既存のピンをクリア
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    addPins(data);
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            fetch(url).then(response => response.json()).then(data => {
+                addPins(data);
+            }).catch(error => console.error('Error fetching data:', error));
         }
 
         function addPins(data) {
