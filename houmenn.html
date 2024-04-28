@@ -21,37 +21,31 @@
         <button onclick="updatePins()">Load Data</button>
     </div>
     <div id="map"></div>
-     <table id="types">
-        <tr>
-            <th></th> <!-- この空セルは行チェックボックスの列 -->
-            <th><input type="checkbox" class="select-column" data-column="0"></th>
-            <th><input type="checkbox" class="select-column" data-column="1"></th>
-            <th><input type="checkbox" class="select-column" data-column="2"></th>
-        </tr>
+<table id="types">
+    <tr>
+        <th></th> <!-- この空セルは行チェックボックスの列 -->
+        <th><input type="checkbox" class="select-column" data-column="0"></th>
+        <th><input type="checkbox" class="select-column" data-column="1"></th>
+        <th><input type="checkbox" class="select-column" data-column="2"></th>
+    </tr>
+    <!-- 以下のスクリプトにより動的に行が追加されます -->
+</table>
+
 <script>
 const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
 const tableBody = document.getElementById('types');
 
-// 全選択チェックボックスを確認して更新する関数
 function updateSelectAllCheckboxes() {
     const allColumnCheckboxes = document.querySelectorAll('.select-column');
     const allRowCheckboxes = document.querySelectorAll('.select-row');
-
-    for (let col = 0; col < 3; col++) {
-        let allChecked = true;
-        document.querySelectorAll(`.type[data-column="${col}"]`).forEach(cb => {
-            allChecked = allChecked && cb.checked;
-        });
-        allColumnCheckboxes[col].checked = allChecked;
-    }
-
-    for (let row = 0; row < 4; row++) {
-        let allChecked = true;
-        document.querySelectorAll(`.type[data-row="${row}"]`).forEach(cb => {
-            allChecked = allChecked && cb.checked;
-        });
-        allRowCheckboxes[row].checked = allChecked;
-    }
+    document.querySelectorAll('.type').forEach(cb => {
+        const column = cb.getAttribute('data-column');
+        const row = cb.getAttribute('data-row');
+        const typesInRow = document.querySelectorAll(`.type[data-row="${row}"]`);
+        const typesInColumn = document.querySelectorAll(`.type[data-column="${column}"]`);
+        allRowCheckboxes[row].checked = Array.from(typesInRow).every(cb => cb.checked);
+        allColumnCheckboxes[column].checked = Array.from(typesInColumn).every(cb => cb.checked);
+    });
 }
 
 for (let row = 0; row < 4; row++) {
@@ -62,51 +56,45 @@ for (let row = 0; row < 4; row++) {
     rowCheckbox.setAttribute('data-row', row);
     rowCheckbox.addEventListener('change', function() {
         const row = this.getAttribute('data-row');
-        document.querySelectorAll(`.type[data-row="${row}"]`).forEach(cb => {
-            cb.checked = this.checked;
-        });
-        updateSelectAllCheckboxes();  // 行のチェックボックスを更新した後に全選択チェックボックスも更新
+        document.querySelectorAll(`.type[data-row="${row}"]`).forEach(cb => cb.checked = this.checked);
+        updateSelectAllCheckboxes();
     });
     const tdRowSelect = document.createElement('td');
     tdRowSelect.appendChild(rowCheckbox);
     tr.appendChild(tdRowSelect);
 
     for (let col = 0; col < 3; col++) {
-        const td = document.createElement('td');
         const index = row * 3 + col;
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'type';
-        checkbox.value = index + 1;
-        checkbox.checked = true;  // すべてチェックされた状態にする
-        checkbox.setAttribute('data-row', row);
-        checkbox.setAttribute('data-column', col);
-        checkbox.addEventListener('change', updateSelectAllCheckboxes);  // チェックボックスを変更した後に全選択チェックボックスも更新
-        td.appendChild(checkbox);
-        td.appendChild(document.createTextNode(' Type ' + labels[index]));
+        const td = document.createElement('td');
+        if (index < labels.length) {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'type';
+            checkbox.value = index + 1;
+            checkbox.checked = true;
+            checkbox.setAttribute('data-row', row);
+            checkbox.setAttribute('data-column', col);
+            checkbox.addEventListener('change', updateSelectAllCheckboxes);
+            td.appendChild(checkbox);
+            td.appendChild(document.createTextNode(' Type ' + labels[index]));
+        }
         tr.appendChild(td);
     }
-    tr.className = (row % 2 === 0) ? 'blue-bg' : 'red-bg';  // 偶数行は青、奇数行は赤の背景色
+    tr.className = row < 2 ? 'blue-bg' : 'red-bg';
     tableBody.appendChild(tr);
 }
 
-// 列の全選択チェックボックスにイベントリスナーを設定
 document.querySelectorAll('.select-column').forEach((colCheckbox, index) => {
     colCheckbox.addEventListener('change', function() {
         const col = this.getAttribute('data-column');
-        document.querySelectorAll(`.type[data-column="${col}"]`).forEach(cb => {
-            cb.checked = this.checked;
-        });
-        updateSelectAllCheckboxes();  // 列のチェックボックスを更新した後に全選択チェックボックスも更新
+        document.querySelectorAll(`.type[data-column="${col}"]`).forEach(cb => cb.checked = this.checked);
+        updateSelectAllCheckboxes();
     });
 });
 
-// ページ読み込み完了後に全選択チェックボックスの状態を確認
 window.onload = updateSelectAllCheckboxes;
 </script>
 
-
-    </table>
 
     <!-- Scripts moved to the end of the body -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
